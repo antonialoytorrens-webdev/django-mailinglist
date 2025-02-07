@@ -13,7 +13,7 @@ from django.utils.encoding import force_str
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from mailinglist import models
-from mailinglist.admin_forms import ConfirmForm, ImportForm, SubmissionModelForm
+from mailinglist.admin_forms import SubmissionModelForm
 from mailinglist.services import MessageService, SubmissionService, SubscriptionService
 
 
@@ -85,10 +85,16 @@ class SendingInline(ImmutableTabluarInline):
 class SubscriptionAdmin(ExtendibleModelAdminMixin, admin.ModelAdmin):
     model = models.Subscription
     readonly_fields = ("token", "status")
-    list_display = ("pk", "user", "email", "mailing_list", "status")
+    #list_display = ("pk", "user", "email", "mailing_list", "status")
+    list_display = ("pk", "user", "mailing_list", "status")
     list_filter = ("mailing_list", "status")
     inlines = (SubscriptionChangeInline, SendingInline)
     actions = ("make_subscribed", "make_unsubscribed")
+
+    #def get_email(self, obj):
+    #    return obj.user.email
+
+    #email.short_description = "Email Address"
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -123,92 +129,6 @@ class SubscriptionAdmin(ExtendibleModelAdminMixin, admin.ModelAdmin):
         )
 
     make_unsubscribed.short_description = "Unsubscribe selected users"
-
-    """ Views """
-
-    def subscribers_import(self, request):
-        if not request.user.has_perm("mailinglist.add_subscription"):
-            raise PermissionDenied()
-        if request.POST:
-            form = ImportForm(request.POST, request.FILES)
-            if form.is_valid():
-                request.session["addresses"] = form.get_addresses()
-                request.session["mailing_list_pk"] = form.cleaned_data[
-                    "mailing_list"
-                ].pk
-
-                confirm_url = reverse("admin:mailinglist_subscription_import_confirm")
-                return HttpResponseRedirect(confirm_url)
-        else:
-            form = ImportForm()
-
-        return render(
-            request,
-            "admin/mailinglist/subscription/import_form.html",
-            {"form": form},
-        )
-
-    def subscribers_import_confirm(self, request):
-        # If no addresses are in the session, start all over.
-
-        if "addresses" not in request.session:
-            import_url = reverse("admin:mailinglist_subscription_import")
-            return HttpResponseRedirect(import_url)
-
-        addresses = request.session["addresses"]
-        mailing_list = models.MailingList.objects.get(
-            pk=request.session["mailing_list_pk"]
-        )
-
-        logger.debug("Confirming addresses: %s", addresses)
-
-        if request.POST:
-            form = ConfirmForm(request.POST)
-            if form.is_valid():
-                try:
-                    service = SubscriptionService()
-                    for _user in addresses.values():
-                        user = service.create_user(**_user)
-                        service.force_subscribe(user=user, mailing_list=mailing_list)
-                finally:
-                    del request.session["addresses"]
-                    del request.session["mailing_list_pk"]
-
-                messages.success(
-                    request,
-                    f"{len(addresses)} subscriptions have been added.",
-                )
-
-                changelist_url = reverse("admin:mailinglist_subscription_changelist")
-                return HttpResponseRedirect(changelist_url)
-        else:
-            form = ConfirmForm()
-
-        return render(
-            request,
-            "admin/mailinglist/subscription/confirm_import_form.html",
-            {"form": form, "subscribers": addresses},
-        )
-
-    """ URLs """
-
-    def get_urls(self):
-        urls = super().get_urls()
-
-        my_urls = [
-            path(
-                "import/",
-                self._wrap(self.subscribers_import),
-                name=self._view_name("import"),
-            ),
-            path(
-                "import/confirm/",
-                self._wrap(self.subscribers_import_confirm),
-                name=self._view_name("import_confirm"),
-            ),
-        ]
-
-        return my_urls + urls
 
 
 class UnchangingAdminMixin:
