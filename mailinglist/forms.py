@@ -43,10 +43,6 @@ class SubscriptionForm(forms.Form):
     def save(self, commit=True):
         if not commit:
             return
-        if self.cleaned_data.get("global-deny", False):
-            models.GlobalDeny.objects.get_or_create(user=self.user)
-        else:
-            models.GlobalDeny.objects.filter(user=self.user).delete()
         service = SubscriptionService()
         for mailing_list in models.MailingList.objects.filter(visible=True):
             wants = self.cleaned_data.get(f"mailing-list_{mailing_list.pk}", False)

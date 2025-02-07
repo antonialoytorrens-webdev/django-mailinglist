@@ -216,8 +216,6 @@ class SubscriptionService:
         return subscription
 
     def _confirm_subscription(self, subscription):
-        if subscription.mailing_list is None:
-            models.GlobalDeny.objects.get_or_create(user=subscription.user)
         return self._update_subscription_status(
             subscription=subscription, to_status=SubscriptionStatusEnum.SUBSCRIBED
         )
@@ -271,8 +269,6 @@ class SubscriptionService:
     ):  # -> models.Subscription:
         """Creates a subscription and sends the activation email (or just
         activates it based on settings)"""
-        if models.GlobalDeny.objects.filter(user=user).exists():
-            return
         subscription = self._subscribe(user=user, mailing_list=mailing_list)
         if subscription.status == SubscriptionStatusEnum.SUBSCRIBED:
             return subscription

@@ -51,17 +51,17 @@ class TestSubscribeFormMixin:
         }
 
 
-class TestGlobalDenyView:
+class TestUnsubscribeAllView:
     def test_get_success_url(self, rf):
         request = rf.get("/fake-path")
         request.user = AnonymousUser()
-        view = setup_view(views.GlobalDenyView(), request)
-        assert view.get_success_url() == "/mailinglist/global_deny/success/"
+        view = setup_view(views.UnsubscribeAllView(), request)
+        assert view.get_success_url() == "/mailinglist/unsubscribeall/success/"
 
     def test_get_object(self, rf):
         request = rf.get("/fake-path")
         request.user = AnonymousUser()
-        view = setup_view(views.GlobalDenyView(), request)
+        view = setup_view(views.UnsubscribeAllView(), request)
         assert view.get_object() is None
 
 

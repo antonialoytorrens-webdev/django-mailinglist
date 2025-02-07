@@ -85,7 +85,7 @@ class SendingInline(ImmutableTabluarInline):
 class SubscriptionAdmin(ExtendibleModelAdminMixin, admin.ModelAdmin):
     model = models.Subscription
     readonly_fields = ("token", "status")
-    list_display = ("pk", "user", "mailing_list", "status")
+    list_display = ("pk", "user", "email", "mailing_list", "status")
     list_filter = ("mailing_list", "status")
     inlines = (SubscriptionChangeInline, SendingInline)
     actions = ("make_subscribed", "make_unsubscribed")
@@ -214,13 +214,6 @@ class SubscriptionAdmin(ExtendibleModelAdminMixin, admin.ModelAdmin):
 class UnchangingAdminMixin:
     def has_change_permission(self, request, obj=None):
         return False
-
-
-@admin.register(models.GlobalDeny)
-class GlobalDenyAdmin(UnchangingAdminMixin, admin.ModelAdmin):
-    model = models.GlobalDeny
-    list_display = ("pk", "user", "created")
-    date_hierarchy = "created"
 
 
 class MessagePartInline(admin.StackedInline):

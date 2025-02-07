@@ -64,13 +64,13 @@ class SubscribeView(SubscribeFormMixin, DetailFormView):
         return reverse("mailinglist:subscribe_success", kwargs=self.kwargs)
 
 
-class GlobalDenyView(SubscribeFormMixin, FormView):
+class UnsubscribeAllView(SubscribeFormMixin, FormView):
     """Allows users to subscrbe to the global deny list."""
 
     template_name = "mailinglist/web/global_unsubscribe.html"
 
     def get_success_url(self):
-        return reverse("mailinglist:global_deny_success")
+        return reverse("mailinglist:unsubscribeall_success")
 
     def get_object(self):
         return None

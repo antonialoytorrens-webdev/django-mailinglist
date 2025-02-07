@@ -15,6 +15,7 @@ class MailingList(models.Model):
     sending) messages"""
 
     name = models.CharField(max_length=128)
+    description = models.TextField()
     slug = models.SlugField(db_index=True, unique=True)
     email = models.EmailField(help_text="Sender e-mail")
     sender = models.CharField(max_length=200, help_text="Sender name")
@@ -38,17 +39,6 @@ class MailingList(models.Model):
     def published_messages(self):
         """All messages that have been published to this mailing list prior to now"""
         return self.messages.filter(submission__published__lte=now()).distinct()
-
-
-class GlobalDeny(models.Model):
-    """Users with instances here will not receive mailing list messages."""
-
-    user = models.OneToOneField(
-        settings.MAILINGLIST_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="mailinglist_deny",
-    )
-    created = models.DateTimeField(auto_now_add=True, editable=False)
 
 
 class Subscription(models.Model):
