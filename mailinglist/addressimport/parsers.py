@@ -141,18 +141,3 @@ def check_field(*, field_name, value, ignore_errors=False):
             f"{field_name} value '{value}' too long, maximum length is "
             f"{max_length} characters."
         )
-
-
-def parse_csv(csv_file, mailing_list, ignore_errors=False):
-    """
-    Parse addresses from CSV file-object into mailing list.
-
-    Returns a dictionary mapping email addresses into Subscription objects.
-    """
-    address_list = AddressList(mailing_list, ignore_errors)
-    _csv_file = io.StringIO(csv_file.read().decode())
-    reader = DictReader(_csv_file)
-    for idx, row in enumerate(reader):
-        address_list.add(**row, location=f"line {idx}")
-
-    return address_list.addresses

@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 import pytest
 import io
 
-from mailinglist.addressimport.parsers import AddressList, parse_csv
+from mailinglist.addressimport.parsers import AddressList
 
 
 @pytest.fixture
@@ -144,30 +144,3 @@ class TestAddressList:
             last_name=None,
         )
         assert subscription.user.email not in address_list_quiet.addresses
-
-
-class TestParseCsv:
-    @patch.object(AddressList, "add")
-    def test_parse(self, p_add, mailing_list):
-        _file = io.BytesIO(
-            b"""first_name,last_name,email
-test,person,person@person.us
-another,human,identity@real.yes"""
-        )
-        parse_csv(_file, mailing_list)
-        p_add.assert_has_calls(
-            [
-                call(
-                    first_name="test",
-                    last_name="person",
-                    email="person@person.us",
-                    location="line 0",
-                ),
-                call(
-                    first_name="another",
-                    last_name="human",
-                    email="identity@real.yes",
-                    location="line 1",
-                ),
-            ]
-        )
