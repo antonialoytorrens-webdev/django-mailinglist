@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_extensions",
-    "django_celery_beat",
     "mailinglist",
     "test_project",
 ]
@@ -133,15 +131,7 @@ GRAPH_MODELS = {
     ],
 }
 
-
-CELERY_BROKER_URL = "redis://redis"
-CELERY_TASK_DEFAULT_QUEUE = "test_project"
-CELERY_TIMEZONE = "America/Chicago"
-
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 MAILINGLIST_BASE_URL = "http://ilocalhost:8000"
 MAILINGLIST_DEFAULT_SENDER_EMAIL = "test@test.com"
-
-MAILINGLIST_HOOKSET = "test_project.hooks.MyCustomHookset"
-MAILINGLIST_USER_MODEL = "test_project.AdHocUserModel"
