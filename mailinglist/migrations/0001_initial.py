@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=128)),
+                ("description", models.TextField()),
                 ("slug", models.SlugField(unique=True)),
                 ("email", models.EmailField(help_text="Sender e-mail", max_length=254)),
                 ("sender", models.CharField(help_text="Sender name", max_length=200)),
@@ -238,29 +239,6 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="message_parts",
                         to="mailinglist.message",
-                    ),
-                ),
-            ],
-        ),
-        migrations.CreateModel(
-            name="GlobalDeny",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("created", models.DateTimeField(auto_now_add=True)),
-                (
-                    "user",
-                    models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="mailinglist_deny",
-                        to=settings.MAILINGLIST_USER_MODEL,
                     ),
                 ),
             ],

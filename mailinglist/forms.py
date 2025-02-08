@@ -34,11 +34,6 @@ class SubscriptionForm(forms.Form):
                 initial=mailing_list.pk in self.subscribed_lists,
                 label=mailing_list.name,
             )
-        self.fields["global-deny"] = forms.BooleanField(
-            required=False,
-            initial=hasattr(user, "mailinglist_deny"),
-            label="Block all mailinglists from sending to me!",
-        )
 
     def save(self, commit=True):
         if not commit:

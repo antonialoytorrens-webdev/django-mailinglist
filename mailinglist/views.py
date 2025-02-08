@@ -64,18 +64,6 @@ class SubscribeView(SubscribeFormMixin, DetailFormView):
         return reverse("mailinglist:subscribe_success", kwargs=self.kwargs)
 
 
-class UnsubscribeAllView(SubscribeFormMixin, FormView):
-    """Allows users to subscrbe to the global deny list."""
-
-    template_name = "mailinglist/web/global_unsubscribe.html"
-
-    def get_success_url(self):
-        return reverse("mailinglist:unsubscribeall_success")
-
-    def get_object(self):
-        return None
-
-
 class SubscribeSuccessView(DetailView):
     """Provides user with insight about subscription, namely whether or
     not they will need to confirm their email address"""

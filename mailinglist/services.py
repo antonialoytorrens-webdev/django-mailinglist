@@ -44,15 +44,14 @@ class TemplateSet:
 
     def _get_template(self, *, suffix="txt", _for="message"):
         _root = "mailinglist/email"
-        slug = "global-deny"
         if self.mailing_list is not None:
             slug = self.mailing_list.slug
-        return select_template(
-            [
-                f"{_root}/{slug}/{_for}.{suffix}",
-                f"{_root}/{_for}.{suffix}",
-            ]
-        )
+            return select_template(
+                [
+                    f"{_root}/{slug}/{_for}.{suffix}",
+                    f"{_root}/{_for}.{suffix}",
+                ]
+            )
 
     def render_to_dict(self, context: dict):  # -> dict[str, str]:
         """Renders each template in the set and arranges the text into a
@@ -315,8 +314,6 @@ class SubmissionService:
             submission.message.mailing_list.subscriptions.filter(
                 status=SubscriptionStatusEnum.SUBSCRIBED
             )
-            # remove all global denies
-            .filter(user__mailinglist_deny__isnull=True)
             # remove all excludes
             .exclude(pk__in=submission.exclude.all().values_list("id", flat=True))
         )

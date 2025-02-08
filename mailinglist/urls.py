@@ -7,18 +7,6 @@ app_name = "mailinglist"
 
 urlpatterns = [
     path(
-        "unsubscribeall/",
-        views.UnsubscribeAllView.as_view(),
-        name="unsubscribeall",
-    ),
-    path(
-        "unsubscribeall/success/",
-        TemplateView.as_view(
-            template_name="mailinglist/web/global_unsubscribe_success.html"
-        ),
-        name="unsubscribeall_success",
-    ),
-    path(
         "subscribe/<slug:mailing_list_slug>/",
         views.SubscribeView.as_view(),
         name="subscribe",
