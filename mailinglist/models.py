@@ -3,10 +3,11 @@ from pathlib import Path
 from django.db import models
 from django.utils.timezone import now
 from django_enumfield.enum import EnumField
-from markdown import markdown
 
 from mailinglist.conf import hookset, settings
 from mailinglist.enum import SubmissionStatusEnum, SubscriptionStatusEnum
+
+from tinymce.models import HTMLField
 
 
 class MailingList(models.Model):
@@ -15,6 +16,7 @@ class MailingList(models.Model):
     sending) messages"""
 
     name = models.CharField(max_length=128)
+    language = models.CharField(max_length=2, help_text="ISO 639 language codes, set 1: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes", default="es")
     description = models.TextField()
     slug = models.SlugField(db_index=True, unique=True)
     email = models.EmailField(help_text="Sender e-mail")
@@ -112,22 +114,12 @@ class MessagePart(models.Model):
     message = models.ForeignKey(
         Message, on_delete=models.CASCADE, related_name="message_parts"
     )
-    heading = models.CharField(max_length=128)
-    order = models.PositiveSmallIntegerField()
-    text = models.TextField()
+    text = HTMLField()
     # TODO: images!
 
     @property
     def html_text(self):
-        return markdown(self.text)
-
-    class Meta:
-        ordering = ["order"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["message", "order"], name="unique_order_per_message"
-            )
-        ]
+        return self.text
 
 
 def attachment_upload_to(instance, filename):

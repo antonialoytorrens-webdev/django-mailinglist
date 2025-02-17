@@ -102,12 +102,6 @@ class MessageService:
         _subscribe_path = reverse(
             "mailinglist:subscribe_confirm", kwargs={"token": subscription.token}
         )
-        if subscription.mailing_list is None:
-            _archive_path = reverse("mailinglist:archives")
-        else:
-            _archive_path = reverse(
-                "mailinglist:archive_index", kwargs={"mailing_list_slug": _list.slug}
-            )
         return {
             "List-Help": self._urlify(_help_path) + self._mailto(_list, subject="help"),
             "List-Unsubscribe": self._urlify(_unsubscribe_path)
@@ -115,7 +109,6 @@ class MessageService:
             "List-Subscribe": self._urlify(_subscribe_path),
             "List-Post": "NO",
             "List-Owner": self._mailto(_list, appended=False),
-            "List-Archive": self._urlify(_archive_path),
         }
 
     def _prepare_kwargs(

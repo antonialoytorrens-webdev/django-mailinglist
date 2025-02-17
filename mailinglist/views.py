@@ -113,13 +113,9 @@ class IsSubscriptionMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         _is_subcription = self.subscription is not None
-        _is_global_unsubcription = False
-        if _is_subcription and self.subscription.mailing_list is None:
-            _is_global_unsubcription = True
         context.update(
             {
                 "token": self.kwargs.get("token"),
-                "is_global_unsubscription": _is_global_unsubcription,
                 "is_subscription": _is_subcription,
             }
         )

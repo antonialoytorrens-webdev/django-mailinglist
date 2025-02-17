@@ -22,9 +22,9 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "Django>=3.2.0",
-        "Markdown>=3.3.0",
         "django-enumfield>=3.0",
         "django-appconf>=1.0.0",
+        "django-tinymce>=3.4.0",
     ],
     author="Paul Stiverson",
     author_email="paul@thismatters.net",
