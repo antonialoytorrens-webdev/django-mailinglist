@@ -17,7 +17,6 @@ class MailingList(models.Model):
 
     name = models.CharField(max_length=128)
     language = models.CharField(max_length=2, help_text="ISO 639 language codes, set 1: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes", default="es")
-    description = models.TextField()
     slug = models.SlugField(db_index=True, unique=True)
     email = models.EmailField(help_text="Sender e-mail")
     sender = models.CharField(max_length=200, help_text="Sender name")
@@ -176,7 +175,7 @@ class Submission(models.Model):
             "subscribers will receive message"
         ),
     )
-    published = models.DateTimeField(null=True, blank=True)
+    published = models.DateTimeField(default=now)
     status = EnumField(SubmissionStatusEnum)
     sendings = models.ManyToManyField(
         Subscription, through="Sending", related_name="sendings"
