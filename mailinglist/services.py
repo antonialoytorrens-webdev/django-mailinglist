@@ -394,7 +394,6 @@ class SubmissionService:
 
     def publish(self, submission: models.Submission):  # -> None:
         """Mark a ``Submission`` for sending."""
-        submission.published = now()
         submission.status = SubmissionStatusEnum.PENDING
         submission.save()
 

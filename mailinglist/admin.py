@@ -227,7 +227,7 @@ class SubmissionAdmin(ExtendibleModelAdminMixin, admin.ModelAdmin):
     form = SubmissionModelForm
     model = models.Submission
     list_display = ("__str__", "status", "published")
-    readonly_fields = ("published", "status")
+    readonly_fields = ("status",)
     exclude = ("sendings",)
     actions = ("publish",)
 
