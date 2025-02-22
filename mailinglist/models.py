@@ -113,7 +113,7 @@ class MessagePart(models.Model):
     message = models.ForeignKey(
         Message, on_delete=models.CASCADE, related_name="message_parts"
     )
-    text = HTMLField()
+    text = HTMLField(help_text=f"%%NAME%%: subscriber name")
     # TODO: images!
 
     @property
