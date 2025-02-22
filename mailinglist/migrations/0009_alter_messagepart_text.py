@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='messagepart',
             name='text',
-            field=tinymce.models.HTMLField(help_text='Personalized variables:\n%%NAME%%: subscriber name'),
+            field=tinymce.models.HTMLField(help_text='%%NAME%%: subscriber name'),
         ),
     ]
