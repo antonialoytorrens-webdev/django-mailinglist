@@ -191,5 +191,5 @@ class Sending(models.Model):
     send jobs to be resumed without double-sending to any users."""
 
     submission = models.ForeignKey(Submission, on_delete=models.PROTECT)
-    subscription = models.ForeignKey(Subscription, on_delete=models.PROTECT)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
     sent = models.DateTimeField(auto_now_add=True)

@@ -8,7 +8,7 @@ from mailinglist.services import SubscriptionService
 class SubscribeForm(forms.Form):
     """Basic subscription details."""
 
-    email = forms.EmailField(label="Email:")
+    email = forms.EmailField(label="Email:", required=True)
     first_name = forms.CharField(label="First name:")
     last_name = forms.CharField(label="Last name:", required=False)
     are_you_sure = forms.BooleanField(label="Are you sure?")
